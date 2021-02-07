@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/melissa-stott/Team-Database#readme",
   "dependencies": {
-    "express": "^4.17.1",
     "mysql": "^2.18.1"
   }
 }
