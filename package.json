@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/melissa-stott/Team-Database/issues"
   },
-  "homepage": "https://github.com/melissa-stott/Team-Database#readme"
+  "homepage": "https://github.com/melissa-stott/Team-Database#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
