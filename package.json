@@ -17,5 +17,7 @@
     "url": "https://github.com/melissa-stott/Team-Database/issues"
   },
   "homepage": "https://github.com/melissa-stott/Team-Database#readme",
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
