@@ -17,33 +17,53 @@ const connection = mysql.createConnection({
   connection.connect((err) => {
     if (err) throw err;
     console.log(`connected as id ${connection.threadId}`);
+    firstQuery();
   });
   app.listen(PORT, () => console.log(`App listening on PORT ${PORT}`));
 
-  const firstQuery = () => {
-      inquirer.prompt(
-          {
-              type: 'list',
-              name: 'startPoint',
-              message: 'What would you like to do?',
-              choices: ['View data', 'Update data', 'Add data', 'Exit'],
-          }
-      ).then((answer) => {
-          switch (answer.startPoint) {
-              case 'View data':
-                  viewInfo();
-                  break;
-              case 'Update data':
-                  updateInfo();
-                  break;
-              case 'Add data':
-                  addInfo();
-                  break;
-              case 'Exit':
-                  connection.end();
-                  break;          
-              }
-      })
-  }
+const firstQuery = () => {
+    inquirer.prompt(
+        {
+            type: 'list',
+            name: 'startPoint',
+            message: 'What would you like to do?',
+            choices: ['View data', 'Update data', 'Add data', 'Exit'],
+        }
+    ).then((answer) => {
+        switch (answer.startPoint) {
+            case 'View data':
+                viewInfo();
+                break;
+            case 'Update data':
+                updateInfo();
+                break;
+            case 'Add data':
+                addInfo();
+                break;
+            case 'Exit':
+                connection.end();
+                break;          
+            }
+    })
+};
+
+const viewInfo = () => {
+    inquirer.prompt(
+        {
+            type: 'list',
+            name: 'viewChoice',
+            message: 'What would you like to view?',
+            choices: ['Departments', 'Roles', 'Employees'],
+        }
+    ).then((answer) => {
+        const query =
+            'SELECT name FROM department';
+        connection.query(query, (err, res) => {
+            if (err) throw err;
+            res.forEach(({ name }) => console.log(name));
+            firstQuery();
+          });
+        });
+    }
 
   
