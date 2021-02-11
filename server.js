@@ -56,14 +56,30 @@ const viewInfo = () => {
             choices: ['Departments', 'Roles', 'Employees'],
         }
     ).then((answer) => {
-        const query =
+        if(answer.viewChoice === 'Departments') {
+            const query =
             'SELECT * FROM department';
         connection.query(query, (err, res) => {
             if (err) throw err;
             console.table(res);
             firstQuery();
-          })
+          })  
+        } else if (answer.viewChoice === 'Roles') {
+            const query = 
+            'SELECT * FROM roles';
+            connection.query(query, (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            firstQuery();
+        })
+        } else if (answer.viewChoice === 'Employees') {
+            const query = 
+            'SELECT * FROM employee';
+            connection.query(query, (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            firstQuery();
         });
-    }
-
-  
+    };
+})
+}
