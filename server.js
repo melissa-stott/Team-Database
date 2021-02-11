@@ -57,12 +57,12 @@ const viewInfo = () => {
         }
     ).then((answer) => {
         const query =
-            'SELECT name FROM department';
+            'SELECT * FROM department';
         connection.query(query, (err, res) => {
             if (err) throw err;
-            res.forEach(({ name }) => console.log(name));
+            console.table(res);
             firstQuery();
-          });
+          })
         });
     }
 
