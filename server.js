@@ -83,3 +83,127 @@ const viewInfo = () => {
     };
 })
 }
+
+const addInfo = () => {
+    inquirer.prompt (
+        {
+            type: 'list',
+            name: 'viewChoice',
+            message: 'Which table would you like to add information into?',
+            choices: ['Departments', 'Roles', 'Employees'],
+        }
+    ).then ((answer) => {
+        console.log(answer);
+        if(answer.viewChoice === 'Departments') {
+            inquirer.prompt ([
+                {
+                    type: 'input',
+                    name: 'newName',
+                    message: 'What is the name of the department?'
+                }
+            ]).then((answers) => {
+                connection.query (
+
+                    'INSERT INTO department SET ?',
+                    {
+                        name: answers.newName
+                    },
+                    (err, res) => {
+                        if (err) throw err;
+                        console.log('New department successfully created');
+                        firstQuery();
+                    }
+                );
+        })  
+        } else if (answer.viewChoice === 'Roles') {
+            connection.query('SELECT * FROM department', (err, res) => {
+                if (err) throw err;
+            inquirer.prompt ([
+                {
+                    type: 'input',
+                    name: 'newTitle',
+                    message: 'Please provide the title of the new position'
+                },
+                {
+                    type: 'input',
+                    name: ['newSalary'],
+                    message: 'What is the salary for this position?'
+                },
+                {
+                    type: 'list',
+                    name: 'deptChoice',
+                    message: 'Please select the department for this new role',
+                    choices() {
+                        const choiceArray = [];
+                        res.forEach(({ id, name }) => {
+                          choiceArray.push(id + " - " + name);
+                        });
+                        return choiceArray;
+                    },
+                }
+            ]).then((answers) => {
+                console.log(answers);
+                connection.query (
+
+                    'INSERT INTO roles SET ?',
+                    {
+                        title: answers.newTitle,
+                        salary: answers.newSalary,
+                        department_id: answers.deptChoice[0]
+                    },
+                    (err, res) => {
+                        if (err) throw err;
+                        console.log('New role successfully created');
+                        firstQuery();
+                    }
+                );
+            })  
+        });
+        }
+            else if (answer.viewChoice === 'Employees') {
+                connection.query('SELECT * FROM roles', (err, res) => {
+                    if (err) throw err;
+                inquirer.prompt ([
+                    {
+                        type: 'input',
+                        name: 'firstName',
+                        message: 'What is the employees first name?'
+                    },
+                    {
+                        type: 'input',
+                        name: 'lastName',
+                        message: 'What is the employees last name?'
+                    },
+                    {
+                        type: 'list',
+                        name: 'roleChoice',
+                        message: 'Please select the role for this new employee',
+                        choices() {
+                            const choiceArray = [];
+                            res.forEach(({ department_id, title }) => {
+                            choiceArray.push(department_id + " - " + title);
+                            });
+                            return choiceArray;
+                        },
+                    }
+                ]).then((answers) => {
+                    console.log(answers);
+                    connection.query (
+
+                        'INSERT INTO employee SET ?',
+                        {
+                            first_name: answers.firstName,
+                            last_name: answers.lastName,
+                            role_id: answers.roleChoice[0]
+                        },
+                        (err, res) => {
+                            if (err) throw err;
+                            console.log('New employee successfully created');
+                            firstQuery();
+                        }
+                    );
+                })  
+            });
+        };
+    })
+}
