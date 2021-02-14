@@ -5,6 +5,7 @@ const { response } = require('express');
 const PORT = process.env.PORT || 8080;
 const app = express();
 const cTable = require('console.table');
+const util = require('util');
 
 const connection = mysql.createConnection({
     host: 'localhost',
