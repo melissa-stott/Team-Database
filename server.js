@@ -28,14 +28,14 @@ const firstQuery = () => {
             type: 'list',
             name: 'startPoint',
             message: 'What would you like to do?',
-            choices: ['View data', 'Update data', 'Add data', 'Exit'],
+            choices: ['View data', 'Update Employee Role', 'Add data', 'Exit'],
         }
     ).then((answer) => {
         switch (answer.startPoint) {
             case 'View data':
                 viewInfo();
                 break;
-            case 'Update data':
+            case 'Update Employee Role':
                 updateInfo();
                 break;
             case 'Add data':
@@ -208,3 +208,46 @@ const addInfo = () => {
         };
     })
 }
+const updateInfo = () => {
+    connection.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+    inquirer.prompt (
+        {
+            type: 'list',
+            name: 'updateRole',
+            message: 'Which employee would you like to update the role for?',
+            choices() {
+                const choiceArray = [];
+                res.forEach(({ role_id, first_name, last_name}) => {
+                choiceArray.push(role_id + " - " + first_name + " " + last_name);
+                });
+                return choiceArray;
+            },
+        } .then ((answers) => {console.log(answers);
+            connection.query('SELECT * FROM roles', (err, res) => {
+                if (err) throw err;
+            inquirer.prompt (
+                {
+                    type: 'list',
+                    name: 'newRole',
+                    message: 'Which of these roles would like to choose?',
+                    choices() {
+                        const choiceArray = [];
+                        res.forEach(({title}) => {
+                        choiceArray.push(title);
+                        });
+                        return choiceArray;
+                    },
+                }.then
+                'UPDATE employee SET ?',
+                {
+                    first_name: answers.firstName,
+                    last_name: answers.lastName,
+                    role_id: answers.roleChoice[0]
+                },
+                (err, res) => {
+                    if (err) throw err;
+                    console.log('New employee successfully created');
+                    firstQuery();
+                },
+         
